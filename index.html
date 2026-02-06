@@ -3,10 +3,426 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mi web</title>
+  <meta name="theme-color" content="#111827" />
+  <title>Radio Online | En vivo</title>
+  <meta name="description" content="Radio online en vivo: música, noticias y programas. Escúchanos 24/7." />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#0f1a2f;
+      --muted:#93a4c7;
+      --text:#eaf0ff;
+      --accent:#22c55e;
+      --accent2:#60a5fa;
+      --danger:#ef4444;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: radial-gradient(900px 500px at 10% 0%, rgba(96,165,250,.18), transparent 50%),
+                  radial-gradient(900px 500px at 90% 20%, rgba(34,197,94,.14), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    a{color:inherit}
+    .wrap{max-width:1100px;margin:0 auto;padding:26px 16px 60px}
+    header{
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+      position:sticky;top:0;backdrop-filter: blur(10px);
+      padding:14px 0;z-index:50;
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{
+      width:42px;height:42px;border-radius:14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: var(--shadow);
+      display:grid;place-items:center;font-weight:900;color:#08101f;
+    }
+    .brand h1{font-size:18px;margin:0;line-height:1.1}
+    .brand p{margin:2px 0 0;color:var(--muted);font-size:12px}
+    nav{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      padding:10px 12px;border-radius:999px;
+      text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+      transition: .15s ease;
+    }
+    .btn:hover{transform: translateY(-1px);border-color:rgba(255,255,255,.22)}
+    .btn.primary{background: linear-gradient(135deg, rgba(34,197,94,.25), rgba(96,165,250,.22)); border-color: rgba(255,255,255,.18)}
+    .btn.wa{background: rgba(34,197,94,.14); border-color: rgba(34,197,94,.35)}
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      margin-top:14px;
+    }
+    @media (max-width: 920px){ .grid{grid-template-columns: 1fr;} header{position:static} }
+    .card{
+      background: rgba(15,26,47,.82);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .hero{
+      padding:20px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+    }
+    .heroTop{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    }
+    .tagLive{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border-radius:999px;
+      background: rgba(239,68,68,.14);
+      border:1px solid rgba(239,68,68,.35);
+      color:#ffd7d7;font-weight:600;font-size:12px;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: var(--danger);
+      box-shadow: 0 0 0 6px rgba(239,68,68,.12);
+      animation: pulse 1.4s infinite;
+    }
+    @keyframes pulse{
+      0%{transform:scale(.95);opacity:.85}
+      70%{transform:scale(1.12);opacity:1}
+      100%{transform:scale(.95);opacity:.85}
+    }
+    .title{
+      margin:0;
+      font-size:30px;
+      line-height:1.05;
+      letter-spacing: -0.02em;
+    }
+    .subtitle{margin:6px 0 0;color:var(--muted);max-width:60ch}
+    .now{
+      display:grid;grid-template-columns: 1fr;gap:10px;
+      padding:14px;border-radius:16px;
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+    .pill{
+      font-size:12px;color:var(--muted);
+      padding:7px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+    }
+    .song{font-weight:700}
+    .controls{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+    }
+    audio{width:100%}
+    .mini{font-size:12px;color:var(--muted);margin:0}
+    .cols{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 520px){ .cols{grid-template-columns:1fr} }
+
+    .side{padding:18px}
+    .side h2{margin:0 0 10px;font-size:16px}
+    .list{display:grid;gap:10px}
+    .item{
+      padding:12px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+    }
+    .item b{display:block;margin-bottom:4px}
+    .muted{color:var(--muted);font-size:13px;line-height:1.4}
+    footer{margin-top:18px;color:var(--muted);font-size:12px;text-align:center}
+    .sep{height:1px;background:rgba(255,255,255,.08);margin:14px 0}
+
+    /* Modal */
+    dialog{
+      border:none;border-radius:16px;
+      padding:0;max-width:720px;width:calc(100% - 22px);
+      background: rgba(15,26,47,.98); color:var(--text);
+      box-shadow: var(--shadow);
+    }
+    .modalBody{padding:18px}
+    .modalHead{
+      padding:14px 18px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+    }
+    .x{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+    .x:hover{border-color:rgba(255,255,255,.22)}
+    .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size:12px; color:var(--muted)}
+  </style>
 </head>
+
 <body>
-  <h1>Hola, mundo 👋</h1>
-  <p>Mi web gratis con GitHub Pages.</p>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true">FM</div>
+        <div>
+          <h1>Radio Online</h1>
+          <p>En vivo 24/7 • Música • Noticias • Comunidad</p>
+        </div>
+      </div>
+
+      <nav aria-label="Navegación">
+        <a class="btn primary" href="#escuchar">🎧 Escuchar</a>
+        <a class="btn" href="#programacion">📻 Programación</a>
+        <a class="btn" href="#contacto">📩 Contacto</a>
+        <button class="btn" id="openTerms" type="button">📄 Términos</button>
+      </nav>
+    </header>
+
+    <main class="grid">
+      <!-- Principal -->
+      <section class="card hero" id="escuchar">
+        <div class="heroTop">
+          <div>
+            <div class="tagLive"><span class="dot" aria-hidden="true"></span> EN VIVO</div>
+            <h2 class="title">Sintoniza y comparte la vibra</h2>
+            <p class="subtitle">
+              Reproduce desde el navegador. Compatible con móviles y desktop.
+              Si tu stream es MP3/AAC, funcionará directo. Para HLS, puede requerir soporte del navegador.
+            </p>
+          </div>
+          <div class="pill" title="Consejo">Tip: usa audios .mp3 o .aac para mayor compatibilidad</div>
+        </div>
+
+        <div class="now" aria-label="Ahora al aire">
+          <div class="row">
+            <div>
+              <div class="muted">Ahora suena</div>
+              <div class="song" id="nowPlaying">🎵 Tu canción / Programa en vivo</div>
+            </div>
+            <div class="pill" id="listeners">👥 Oyentes: —</div>
+          </div>
+
+          <div class="controls">
+            <audio id="player" controls preload="none">
+              <!-- CAMBIA ESTA URL POR TU STREAM REAL -->
+              <source src="TU_STREAM_URL_AQUI" type="audio/mpeg">
+              Tu navegador no soporta audio HTML5.
+            </audio>
+
+            <div class="cols">
+              <button class="btn primary" id="btnPlay" type="button">▶️ Reproducir</button>
+              <button class="btn" id="btnStop" type="button">⏹️ Detener</button>
+            </div>
+
+            <p class="mini">
+              Si no reproduce: verifica la URL del stream, que sea HTTPS, y que no requiera autenticación.
+            </p>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+
+        <div class="cols">
+          <div class="item">
+            <b>📣 Mensaje rápido (placeholder)</b>
+            <div class="muted">Aquí podrías integrar un chat (WhatsApp/Telegram/Discord) o un formulario.</div>
+            <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap">
+              <a class="btn wa" target="_blank" rel="noreferrer"
+                 href="https://wa.me/593000000000?text=Hola%20Radio!%20Estoy%20escuchando%20en%20vivo.">
+                💬 WhatsApp
+              </a>
+              <a class="btn" target="_blank" rel="noreferrer" href="https://instagram.com/">📷 Instagram</a>
+              <a class="btn" target="_blank" rel="noreferrer" href="https://facebook.com/">📘 Facebook</a>
+            </div>
+          </div>
+
+          <div class="item" id="programacion">
+            <b>📻 Programación (ejemplo)</b>
+            <div class="muted">Edita estos bloques con tu grilla real.</div>
+            <ul class="muted" style="margin:10px 0 0; padding-left:18px">
+              <li><b>Lun–Vie</b> 07:00 — Morning Show</li>
+              <li><b>Lun–Vie</b> 12:00 — Noticias & Comunidad</li>
+              <li><b>Lun–Vie</b> 18:00 — Top Hits</li>
+              <li><b>Sáb</b> 10:00 — Especiales</li>
+              <li><b>Dom</b> 20:00 — Chill & Relax</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Lateral -->
+      <aside class="card side" id="contacto">
+        <h2>📌 Información</h2>
+        <div class="list">
+          <div class="item">
+            <b>📍 Ciudad</b>
+            <div class="muted">Ambato • Ecuador (edita aquí)</div>
+          </div>
+          <div class="item">
+            <b>📧 Contacto</b>
+            <div class="muted">contacto@tu-radio.com (edita aquí)</div>
+          </div>
+          <div class="item">
+            <b>🕒 Horario</b>
+            <div class="muted">Transmisión 24/7</div>
+          </div>
+          <div class="item">
+            <b>🎚️ Calidad</b>
+            <div class="muted">Recomendado: 128–192 kbps MP3/AAC</div>
+          </div>
+          <div class="item">
+            <b>🔗 Compartir</b>
+            <div class="muted">Copia tu link y envíalo a tus oyentes.</div>
+            <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap">
+              <button class="btn" id="copyUrl" type="button">📋 Copiar URL</button>
+              <button class="btn" id="share" type="button">📤 Compartir</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+
+        <h2>🧩 Tips rápidos</h2>
+        <div class="muted">
+          <ol style="margin:10px 0 0; padding-left:18px">
+            <li>Usa <b>HTTPS</b> en el stream para evitar bloqueos del navegador.</li>
+            <li>Si tu stream es <b>Icecast/Shoutcast</b>, usa la URL directa al .mp3 o .aac.</li>
+            <li>En GitHub Pages, sube este archivo como <b>index.html</b>.</li>
+          </ol>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      © <span id="year"></span> Radio Online • Hecho con HTML5 + GitHub Pages
+    </footer>
+  </div>
+
+  <!-- Modal Términos -->
+  <dialog id="terms">
+    <div class="modalHead">
+      <div>
+        <b>Términos & Aviso</b>
+        <div class="kbd">Cierra con Esc</div>
+      </div>
+      <button class="x" id="closeTerms" type="button">✕</button>
+    </div>
+    <div class="modalBody">
+      <p class="muted">
+        Este sitio es una plantilla. Asegúrate de tener derechos/licencias para la música y contenidos transmitidos.
+        Si recopilas datos (formularios, analytics), agrega política de privacidad.
+      </p>
+      <div class="sep"></div>
+      <p class="muted">
+        <b>Compatibilidad:</b> La reproducción depende del tipo de stream y del navegador.
+        MP3/AAC suele funcionar mejor. HLS puede requerir soporte adicional.
+      </p>
+    </div>
+  </dialog>
+
+  <script>
+    // ===== Config =====
+    // (Opcional) Cambia aquí textos dinámicos básicos
+    const STATION_NAME = "Radio Online";
+    const DEFAULT_NOW_PLAYING = "🎵 Tu canción / Programa en vivo";
+
+    // ===== Helpers =====
+    const $ = (id) => document.getElementById(id);
+
+    // ===== Elements =====
+    const player = $("player");
+    const btnPlay = $("btnPlay");
+    const btnStop = $("btnStop");
+    const nowPlaying = $("nowPlaying");
+    const listeners = $("listeners");
+    const year = $("year");
+    const copyUrl = $("copyUrl");
+    const shareBtn = $("share");
+    const terms = $("terms");
+    const openTerms = $("openTerms");
+    const closeTerms = $("closeTerms");
+
+    // ===== Init =====
+    year.textContent = new Date().getFullYear();
+    nowPlaying.textContent = DEFAULT_NOW_PLAYING;
+
+    // Fake listeners (placeholder). Si tienes API, reemplaza esta parte.
+    function setFakeListeners(){
+      const n = Math.floor(30 + Math.random() * 120);
+      listeners.textContent = `👥 Oyentes: ${n}`;
+    }
+    setFakeListeners();
+    setInterval(setFakeListeners, 12000);
+
+    // ===== Controls =====
+    btnPlay.addEventListener("click", async () => {
+      try {
+        await player.play();
+        btnPlay.textContent = "⏸️ Reproduciendo";
+      } catch (e) {
+        alert("No se pudo reproducir. Revisa la URL del stream y que sea HTTPS.");
+      }
+    });
+
+    btnStop.addEventListener("click", () => {
+      player.pause();
+      player.currentTime = 0;
+      btnPlay.textContent = "▶️ Reproducir";
+    });
+
+    player.addEventListener("play", () => {
+      document.title = `▶️ En vivo | ${STATION_NAME}`;
+    });
+    player.addEventListener("pause", () => {
+      document.title = `Radio Online | En vivo`;
+    });
+
+    // ===== Share / Copy =====
+    copyUrl.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(location.href);
+        copyUrl.textContent = "✅ Copiado";
+        setTimeout(() => copyUrl.textContent = "📋 Copiar URL", 1200);
+      } catch {
+        alert("No se pudo copiar. Copia manualmente la URL del navegador.");
+      }
+    });
+
+    shareBtn.addEventListener("click", async () => {
+      const data = {
+        title: document.title,
+        text: "Escucha la radio en vivo 🎧",
+        url: location.href
+      };
+      if (navigator.share) {
+        try { await navigator.share(data); }
+        catch {}
+      } else {
+        alert("Tu navegador no soporta compartir. Usa 'Copiar URL'.");
+      }
+    });
+
+    // ===== Modal =====
+    openTerms.addEventListener("click", () => terms.showModal());
+    closeTerms.addEventListener("click", () => terms.close());
+    terms.addEventListener("click", (e) => {
+      const rect = terms.getBoundingClientRect();
+      const inDialog = rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
+                       rect.left <= e.clientX && e.clientX <= rect.left + rect.width;
+      if (!inDialog) terms.close();
+    });
+  </script>
 </body>
 </html>
